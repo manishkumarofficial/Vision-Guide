@@ -1,7 +1,3 @@
-Thanks, Manish! Here's your **final copy-paste-ready `README.md`** with both yours and **Madhumita U L's** LinkedIn profiles, emails, and all other details correctly updated:
-
----
-
 # 👁️‍🗨️ Vision Guide - AI Assistant for the Visually Impaired
 
 Vision Guide is an innovative AI-powered application designed to assist visually impaired individuals through real-time video analysis and voice-based interactions. It leverages cutting-edge technologies like Gemini Flash 2.0 for visual interpretation and GPT-based voice assistance to provide navigation, object recognition, and contextual guidance in real-time.
