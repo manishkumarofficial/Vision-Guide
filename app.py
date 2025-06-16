@@ -10,8 +10,8 @@ import textwrap
 app = Flask(__name__)
 
 # Configure Generative AI
-genai.configure(api_key="Your-Gemini-Api")
-model = genai.GenerativeModel('gemini-pro-vision')
+genai.configure(api_key="AIzaSyCkwr9d4XmpwzZ0DfsJn5GGyI3WOcqgAAg")
+
 
 @app.route('/')
 def index():
@@ -41,6 +41,7 @@ def upload():
         img = PIL.Image.open(io.BytesIO(image_binary))
 
         # Use Generative AI model to generate text from the image
+        model = genai.GenerativeModel('gemini-1.5-flash')
         response = model.generate_content(["Describe the scene in the image using beautiful and simple language", img], stream=True)
         response.resolve()
 
@@ -56,29 +57,34 @@ def upload():
 
 @app.route('/gpt', methods=['GET', 'POST'])
 def gpt():
+    response_text = ""
+    audio=''
     if request.method == 'POST':
         # Get transcribed text from the form
         transcribed_text = request.form.get('transcribed_text')
-
+          
         # Generate response using the transcribed text
         if transcribed_text:
             # Generate response using Generative AI model
+            model = genai.GenerativeModel('gemini-1.5-flash')
             rply = model.generate_content("explain in 3 lines"+ transcribed_text)
             response_text = rply.text
             print(response_text)
             # Convert response text to speech
             tts = gTTS(text=response_text, lang='en')
-            # Save speech to a temporary file
-            tts.save('response.mp3')
+            tts.save('output.mp3')
             # Encode the audio file as base64
-            with open("response.mp3", "rb") as audio_file:
+            with open("output.mp3", "rb") as audio_file:
                  encoded_string = base64.b64encode(audio_file.read()).decode('utf-8')
         else:
             response_text = "No input provided."
             encoded_string = ""
         
         # Return the response to the client
-        return redirect(url_for('result'))
+        return render_template('gpt.html', response=response_text, audio=encoded_string)
+    else:
+        # If it's a GET request, render the form
+        return render_template('gpt.html')
 @app.route('/result')
 def result():
     audio_url = "output.mp3"
